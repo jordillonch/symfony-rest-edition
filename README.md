@@ -69,9 +69,23 @@ Welcome page" link to load up your first Symfony page.
 You can also use a web-based configurator by clicking on the "Configure your
 Symfony Application online" link of the `config.php` page.
 
+You need to create a client:
+
+    app/console acme:oauth-server:client:create --redirect-uri="http://clinet.local/" --grant-type="authorization_code" --grant-type="password" --grant-type="refresh_token" --grant-type="token" --grant-type="client_credentials"
+
+    Added a new client with public id 2_1y1zqhh7ws5c8kok8g8w88kkokos0wwswwwowos4o48s48s88w, secret 16eqpwofy5dwo4wggk4s40s80sgcs4gc0cwgwsc8k8w0k8sks4
+
+Then you need to get an access token:
+
+    http://symfony-rest-edition.lo/app_dev.php/oauth/v2/token?client_id=2_1y1zqhh7ws5c8kok8g8w88kkokos0wwswwwowos4o48s48s88w&client_secret=16eqpwofy5dwo4wggk4s40s80sgcs4gc0cwgwsc8k8w0k8sks4&grant_type=client_credentials
+
+    {"access_token":"ZTVhNGY3ZGRlNDdmODhjM2Q0ZWU3YzY3NzgyZDlmMTM1N2M3ZTVmNWU5ZjYyMzI0YjA1MjQ1NjYwOWEwNmFmYQ","expires_in":3600,"token_type":"bearer","scope":"user","refresh_token":"NGI0NDQ2NTM0NzY5NTgzZDM3Mzk1YmQ5NWRjYTJlMzc4ODZmYzA0MDQ4YWU1ZjFkYWVmODQ2ZDRkMmFlNWQ5OQ"}
+
+
 To see a real-live Symfony page in action, access the following page:
 
-    web/app_dev.php/notes
+    web/app_dev.php/api/notes?access_token=ZTVhNGY3ZGRlNDdmODhjM2Q0ZWU3YzY3NzgyZDlmMTM1N2M3ZTVmNWU5ZjYyMzI0YjA1MjQ1NjYwOWEwNmFmYQ
+
 
 Using the console after installing httpied.org first determine a valid session ID,
 since the demo app uses a session to "persist" data for simplicity. You can either
@@ -79,7 +93,7 @@ use some tool to inspect response headers in your browser to determine an active
 session ID or use httpie with a HEAD request copy the ``PHPSESSID`` value from the
 ``Set-Cookie`` header:
 
-    http HEAD http://symfony-rest-edition.lo/app_dev.php/notes -a restapi:secretpw
+    http HEAD http://symfony-rest-edition.lo/app_dev.php/api/notes -a restapi:secretpw
 
 So for example:
 
@@ -96,15 +110,15 @@ So for example:
 Would mean that the session ID is ``lclnc7aem1gdgnmo9nrr4t7hj0``. Now replace ``[sessionid]``
 with the session ID you determined and run the following requests:
 
-    http http://symfony-rest-edition.lo/app_dev.php/notes Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
-    http POST http://symfony-rest-edition.lo/app_dev.php/notes Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
-    http http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
-    http DELETE http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
-    http PUT http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
-    http PUT http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
-    http PUT http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
-    http PUT http://symfony-rest-edition.lo/app_dev.php/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
-    http http://symfony-rest-edition.lo/app_dev.php/notes?offset=1&limit=1 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
+    http http://symfony-rest-edition.lo/app_dev.php/api/notes Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
+    http POST http://symfony-rest-edition.lo/app_dev.php/api/notes Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
+    http http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
+    http DELETE http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
+    http PUT http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
+    http PUT http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
+    http PUT http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
+    http PUT http://symfony-rest-edition.lo/app_dev.php/api/notes/0 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw < note.json
+    http http://symfony-rest-edition.lo/app_dev.php/api/notes?offset=1&limit=1 Cookie:PHPSESSID=[sessionid] --json -a restapi:secretpw
 
 To run the tests install PHPUnit 3.7+ and call:
 
@@ -200,6 +214,8 @@ It comes pre-configured with the following bundles:
 
   * [**NelmioApiDocBundle**][17] - Add API documentation features
 
+  * [**FOSOAuthServerBundle**][19] - Add OAuth2 support
+
 Enjoy!
 
 [1]:  http://symfony.com/doc/2.1/book/installation.html
@@ -220,3 +236,4 @@ Enjoy!
 [16]: https://github.com/FriendsOfSymfony/FOSRestBundle
 [17]: https://github.com/nelmio/NelmioApiDocBundle
 [18]: https://github.com/TheFootballSocialClub/FSCHateoasBundle
+[19]: https://github.com/FriendsOfSymfony/FOSOAuthServerBundle
