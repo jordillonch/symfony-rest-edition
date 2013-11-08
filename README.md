@@ -58,7 +58,15 @@ Access the `config.php` script from a browser:
 
 If you get any warnings or recommendations, fix them before moving on.
 
-3) Browsing the Demo Application
+3) Configure and create schema in database
+------------------------------------------
+
+After configure parameters.yml database properties.
+
+    php app/console doctrine:schema:create
+
+
+4) Browsing the Demo Application
 --------------------------------
 
 Congratulations! You're now ready to use Symfony.
@@ -124,7 +132,7 @@ To run the tests install PHPUnit 3.7+ and call:
 
     phpunit -c app/
 
-4) Getting started with Symfony
+5) Getting started with Symfony
 -------------------------------
 
 This distribution is meant to be the starting point for your Symfony
